@@ -1,0 +1,238 @@
+{
+  "extends" : "thirdParty.api",
+  "abstract" : false,
+  "root" : "https://myapp.appspot.com/_ah/api",
+  "name" : "heartbeatapi",
+  "version" : "1.0",
+  "description" : "An API to notify the game's server of your match's status",
+  "defaultVersion" : false,
+  "adapter" : {
+    "bns" : "https://myapp.appspot.com/_ah/spi",
+    "deadline" : 10.0,
+    "type" : "lily"
+  },
+  "auth" : {
+    "allowCookieAuth" : false
+  },
+  "frontendLimits" : {
+    "unregisteredUserQps" : -1,
+    "unregisteredQps" : -1,
+    "unregisteredDaily" : -1,
+    "rules" : [ ]
+  },
+  "cacheControl" : {
+    "type" : "no-cache",
+    "maxAge" : 0
+  },
+  "methods" : {
+    "heartbeatapi.endmatch" : {
+      "path" : "endMatch/{id}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.matchmaking.service.HeartbeatServiceAPI.endMatch",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "empty"
+      }
+    },
+    "heartbeatapi.getOpenMatches" : {
+      "path" : "heartbeatcollection",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.matchmaking.service.HeartbeatServiceAPI.getOpenMatches",
+      "request" : {
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heartbeatapi.registermatch" : {
+      "path" : "addHeartBeat/{UUID}/{gamemode}/{players}/{countrycode}",
+      "httpMethod" : "POST",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.matchmaking.service.HeartbeatServiceAPI.addHeartBeat",
+      "request" : {
+        "parameters" : {
+          "UUID" : {
+            "type" : "string",
+            "required" : true
+          },
+          "gamemode" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "players" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "countrycode" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heartbeatapi.ping" : {
+      "path" : "heartbeat/{id}/{UUID}/{gamemode}/{players}/{countrycode}",
+      "httpMethod" : "PUT",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.matchmaking.service.HeartbeatServiceAPI.updateHeartbeat",
+      "request" : {
+        "parameters" : {
+          "id" : {
+            "type" : "string",
+            "required" : true
+          },
+          "UUID" : {
+            "type" : "string",
+            "required" : true
+          },
+          "gamemode" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "players" : {
+            "type" : "int32",
+            "required" : true
+          },
+          "countrycode" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    },
+    "heartbeatapi.getMostPopularGameMode" : {
+      "path" : "mostpopulargamemode/{countrycode}",
+      "httpMethod" : "GET",
+      "authLevel" : "NONE",
+      "scopes" : [ "https://www.googleapis.com/auth/userinfo.email" ],
+      "audiences" : [ ],
+      "clientIds" : [ "292824132082.apps.googleusercontent.com" ],
+      "rosyMethod" : "com.matchmaking.service.HeartbeatServiceAPI.getHeartbeatsByCountry",
+      "request" : {
+        "parameters" : {
+          "countrycode" : {
+            "type" : "string",
+            "required" : true
+          }
+        },
+        "body" : "empty"
+      },
+      "response" : {
+        "body" : "autoTemplate(backendResponse)"
+      }
+    }
+  },
+  "descriptor" : {
+    "schemas" : {
+      "Heartbeat" : {
+        "id" : "Heartbeat",
+        "type" : "object",
+        "properties" : {
+          "gameMode" : {
+            "type" : "integer"
+          },
+          "players" : {
+            "type" : "integer"
+          },
+          "id" : {
+            "type" : "string"
+          },
+          "hostAddress" : {
+            "type" : "string"
+          },
+          "timeStamp" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "countryCode" : {
+            "type" : "string"
+          }
+        }
+      },
+      "HeartbeatCollection" : {
+        "id" : "HeartbeatCollection",
+        "type" : "object",
+        "properties" : {
+          "items" : {
+            "type" : "array",
+            "items" : {
+              "$ref" : "Heartbeat"
+            }
+          }
+        }
+      },
+      "MostPopularGameMode" : {
+        "id" : "MostPopularGameMode",
+        "type" : "object",
+        "properties" : {
+          "gameMode" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "players" : {
+            "type" : "string",
+            "format" : "int64"
+          },
+          "countryCode" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "methods" : {
+      "com.matchmaking.service.HeartbeatServiceAPI.endMatch" : {
+      },
+      "com.matchmaking.service.HeartbeatServiceAPI.getOpenMatches" : {
+        "response" : {
+          "$ref" : "HeartbeatCollection"
+        }
+      },
+      "com.matchmaking.service.HeartbeatServiceAPI.addHeartBeat" : {
+        "response" : {
+          "$ref" : "Heartbeat"
+        }
+      },
+      "com.matchmaking.service.HeartbeatServiceAPI.updateHeartbeat" : {
+        "response" : {
+          "$ref" : "Heartbeat"
+        }
+      },
+      "com.matchmaking.service.HeartbeatServiceAPI.getHeartbeatsByCountry" : {
+        "response" : {
+          "$ref" : "MostPopularGameMode"
+        }
+      }
+    }
+  }
+}

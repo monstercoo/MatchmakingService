@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Hosting Game</title>
+</head>
+<body>
+ 
+<form action="javascript:void(0);">
+<h2>Get Most Popular Game Mode</h2>
+<div id="hostingResult"></div>
+<p/>
+<div>
+<label for="uuid">UUID:</label>
+<input id="uuid" value="7B2VHKPEV0"></input>
+</div>
+<div>
+<label for="country">Country Code:</label>
+<input id="country" value="US"></input>
+</div>
+<div>
+<label for="gamemode">Game Mode:</label>
+<input id="gamemode" value="1"></input>
+</div>
+<div>
+<label for="players">Players in match:</label>
+<input id="players" value="1"></input>
+</div>
+<br/>
+<div><input id="registerMatch" type="submit" value="Host Match"></div>
+<div><input id="endMatch" type="submit" value="End Match"></div>
+</form>
+
+
+<script type="text/javascript">
+var secretcode;
+var the_interval;
+
+function init() {
+	gapi.client.load('heartbeatapi', '1.0', null, 'http://localhost:8888/_ah/api');
+
+	document.getElementById('registerMatch').onclick = function() {
+		if (secretcode == null)
+		{
+			registerMatch();
+		}else{
+			hostingLoop();
+		}
+	}
+	
+	document.getElementById('endMatch').onclick = function() {
+		if (secretcode != null)
+		{
+			endMatch();
+		}
+	}	
+}
+
+
+function registerMatch() {
+	var requestData = {};
+	requestData.UUID = document.getElementById('uuid').value;
+	requestData.countrycode = document.getElementById('country').value;
+	requestData.gamemode = document.getElementById('gamemode').value;
+	requestData.players = document.getElementById('players').value;
+	requestData.countrycode = document.getElementById('country').value;
+	
+	
+	gapi.client.heartbeatapi.registermatch(requestData).execute(function(resp) {
+	var result;
+
+	if (resp) {
+		result = "Match Registered. <strong>This page will continuosly update server with your status.</strong> Your secret token is: " + resp.id + "<br/>Response: " + JSON.stringify(resp.result);
+		secretcode = resp.id;
+		the_interval = setInterval(hostingLoop, 5000);
+	}else{
+		result =  "Error hosting game.";
+	}
+
+	document.getElementById('hostingResult').innerHTML = result;
+	document.getElementById('registerMatch').value = "Update Match Status"
+	});
+}
+
+function endMatch() {
+	var requestData = {};
+	requestData.id = secretcode;
+	clearInterval(the_interval);
+	
+	gapi.client.heartbeatapi.endmatch(requestData).execute(function(resp) {
+		window.location.replace("index.html");
+	});
+}
+
+
+function hostingLoop() {
+
+	if (secretcode == null)
+	{
+		endMatch();
+		return;
+	}
+	
+	var requestData = {};
+	requestData.id = secretcode;
+	requestData.UUID = document.getElementById('uuid').value;
+	requestData.countrycode = document.getElementById('country').value;
+	requestData.gamemode = document.getElementById('gamemode').value;
+	requestData.players = document.getElementById('players').value;
+	requestData.countrycode = document.getElementById('country').value;
+	
+	gapi.client.heartbeatapi.ping(requestData).execute(function(resp) {
+		var result;
+	
+		if (resp) {
+			result = "Match Registered. <strong>This page will continuosly update server with your status.</strong> Your secret token is: " + resp.id + "<br/>Response: " + JSON.stringify(resp.result);
+			secretcode = resp.id;
+		}else{
+			result =  "Hosting error.";
+		}
+	
+		document.getElementById('hostingResult').innerHTML = result;
+	});
+}
+
+</script>
+<script src="https://apis.google.com/js/client.js?onload=init"></script>
+</body>
+</html>

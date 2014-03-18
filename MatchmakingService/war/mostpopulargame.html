@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Most Popular Game Mode</title>
+</head>
+<body>
+ 
+<form action="javascript:void(0);">
+<h2>Get Most Popular Game Mode</h2>
+<div id="getGameModeResult"></div>
+<div><input id="country" value="US"></input></div>
+<div><input id="getGameMode" type="submit" value="Query Server"></div>
+</form>
+
+
+<script type="text/javascript">
+function init() {
+	gapi.client.load('heartbeatapi', '1.0', null, 'http://localhost:8888/_ah/api');
+
+	document.getElementById('getGameMode').onclick = function() {
+		getGameModeResults();
+	}
+}
+
+
+function getGameModeResults() {
+	var requestData = {};
+	requestData.countrycode = document.getElementById('country').value;
+	gapi.client.heartbeatapi.getMostPopularGameMode(requestData).execute(function(resp) {
+	var result;
+
+	if (resp) {
+		result = "Game mode " + resp.gameMode + " is the most popular game mode in " + resp.countryCode + "<br/>Response: " + JSON.stringify(resp.result); ;
+	}else{
+		result =  "No current matches.";
+	}
+
+	document.getElementById('getGameModeResult').innerHTML = result;
+	
+});
+}
+</script>
+<script src="https://apis.google.com/js/client.js?onload=init"></script>
+</body>
+</html>
