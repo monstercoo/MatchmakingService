@@ -33,7 +33,6 @@ public class HeartbeatDatastore {
 /**
  * storeHeartbeat - Stores a Heartbeat into the Datastore
  * */
-	
 static public void storeHeartbeat(Heartbeat heartbeat) throws NotFoundException
 {
 	DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
