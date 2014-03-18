@@ -28,46 +28,10 @@ import java.util.Map;
  * HeartBeatDatastore - Class used for all interactions with the Datastore.
  */
 
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
-/**
- * @author Aaron
- *
- */
 public class HeartbeatDatastore {
 
 /**
- * storeHEartbeat - Stores a Heartbeat into the Datastore
+ * storeHeartbeat - Stores a Heartbeat into the Datastore
  * */
 static public void storeHeartbeat(Heartbeat heartbeat) throws NotFoundException
 {
